@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse Social - Connect & Share</title>
+    
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <div class="brand-logo">
+                <i class="fa-solid fa-bolt"></i> Pulse
+            </div>
+
+            <!-- Global Search -->
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="global-search-input" placeholder="Search users or posts...">
+                <div class="search-results-dropdown" id="search-results-dropdown">
+                    <!-- Dynamic search results -->
+                </div>
+            </div>
+
+            <!-- Nav Action Buttons & User Menu -->
+            <div class="nav-actions">
+                <button class="icon-btn" id="theme-toggle-btn" title="Toggle Light/Dark Theme">
+                    <i class="fa-solid fa-sun"></i>
+                </button>
+                <div id="nav-right-actions" class="nav-actions">
+                    <!-- Loaded dynamically via checkAuthStatus() -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main App Container -->
+    <div class="main-container">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside class="left-sidebar">
+            <nav class="nav-menu">
+                <a class="nav-link active" data-page="home">
+                    <i class="fa-solid fa-house"></i> Home Feed
+                </a>
+                <a class="nav-link" data-page="following">
+                    <i class="fa-solid fa-user-group"></i> Following
+                </a>
+                <a class="nav-link" data-page="explore">
+                    <i class="fa-solid fa-compass"></i> Explore
+                </a>
+                <a class="nav-link" data-page="profile">
+                    <i class="fa-solid fa-user"></i> My Profile
+                </a>
+            </nav>
+
+            <button class="btn-primary" id="sidebar-create-btn" style="width: 100%; justify-content: center; padding: 12px; margin-top: 16px;">
+                <i class="fa-solid fa-pen-to-square"></i> New Post
+            </button>
+
+            <!-- User Mini Card at Bottom of Left Sidebar -->
+            <div class="user-mini-card" id="sidebar-user-card" style="display: none; margin-top: 24px;">
+                <!-- Filled dynamically -->
+            </div>
+        </aside>
+
+        <!-- Center Main Content (Feed & Profile View) -->
+        <main class="center-content">
+            
+            <!-- Quick Create Post Input Card -->
+            <div class="create-post-card" id="create-post-card" style="display: none;">
+                <div class="create-post-header">
+                    <img src="" alt="Avatar" class="avatar">
+                    <textarea id="inline-post-text" placeholder="What's on your mind? Share your thoughts..."></textarea>
+                </div>
+                <div class="form-group" style="margin-top: 8px;">
+                    <input type="text" id="inline-post-image-url" placeholder="Optional Image URL (https://...)">
+                </div>
+                <div class="create-post-actions">
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">
+                        <i class="fa-regular fa-image"></i> Supports Unsplash / Direct Image URLs
+                    </div>
+                    <button class="btn-primary" id="inline-post-submit-btn">
+                        <i class="fa-solid fa-paper-plane"></i> Post
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feed Filter Tabs -->
+            <div class="feed-tabs" id="feed-filter-tabs">
+                <div class="feed-tab active" data-feed="all">✨ All Posts</div>
+                <div class="feed-tab" data-feed="following">👥 Following</div>
+            </div>
+
+            <!-- Dynamic Main Feed & Profile Display Area -->
+            <div id="main-feed-area">
+                <!-- Posts or Profile dynamically injected here -->
+            </div>
+        </main>
+
+        <!-- Right Sidebar (Suggested Users & Trending) -->
+        <aside class="right-sidebar">
+            
+            <!-- Quick Demo Accounts -->
+            <div class="sidebar-widget">
+                <div class="widget-title">
+                    <i class="fa-solid fa-key" style="color: var(--accent-primary);"></i> Quick Demo Login
+                </div>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 8px;">
+                    Click any sample account to switch users instantly:
+                </p>
+                <div class="demo-account-pills">
+                    <span class="demo-pill" data-demo-user="alex_dev">⚡ @alex_dev</span>
+                    <span class="demo-pill" data-demo-user="sophia_design">🎨 @sophia_design</span>
+                    <span class="demo-pill" data-demo-user="marcus_tech">☕ @marcus_tech</span>
+                    <span class="demo-pill" data-demo-user="emma_travel">📸 @emma_travel</span>
+                </div>
+            </div>
+
+            <!-- Suggested Users -->
+            <div class="sidebar-widget">
+                <div class="widget-title">
+                    <i class="fa-solid fa-user-plus" style="color: var(--accent-primary);"></i> Who to Follow
+                </div>
+                <div id="suggested-users-list">
+                    <!-- Injected dynamically -->
+                </div>
+            </div>
+
+            <!-- Trending Topics -->
+            <div class="sidebar-widget">
+                <div class="widget-title">
+                    <i class="fa-solid fa-fire" style="color: #f59e0b;"></i> Trending Topics
+                </div>
+                <div class="trending-item">
+                    <span class="trending-tag">#webdev</span>
+                    <span class="trending-count">1,240 posts</span>
+                </div>
+                <div class="trending-item">
+                    <span class="trending-tag">#coding</span>
+                    <span class="trending-count">980 posts</span>
+                </div>
+                <div class="trending-item">
+                    <span class="trending-tag">#uiux</span>
+                    <span class="trending-count">750 posts</span>
+                </div>
+                <div class="trending-item">
+                    <span class="trending-tag">#design</span>
+                    <span class="trending-count">620 posts</span>
+                </div>
+                <div class="trending-item">
+                    <span class="trending-tag">#photography</span>
+                    <span class="trending-count">410 posts</span>
+                </div>
+            </div>
+
+        </aside>
+
+    </div>
+
+    <!-- Modals -->
+
+    <!-- Auth Modal (Login / Register) -->
+    <div class="modal-overlay" id="auth-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title" id="auth-modal-title">Welcome Back</h3>
+                <button class="close-modal-btn">&times;</button>
+            </div>
+            <form id="auth-form">
+                <!-- Login Fields -->
+                <div id="login-fields">
+                    <div class="form-group">
+                        <label>Username or Email</label>
+                        <input type="text" id="login-username" placeholder="e.g. alex_dev or alex@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="login-password" placeholder="••••••••">
+                    </div>
+                </div>
+
+                <!-- Register Fields -->
+                <div id="register-fields" style="display: none;">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="reg-fullname" placeholder="e.g. Alex Rivers">
+                    </div>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="reg-username" placeholder="e.g. alex_dev">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="reg-email" placeholder="alex@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="reg-password" placeholder="At least 6 characters">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" id="auth-submit-btn" style="width: 100%; justify-content: center; margin-top: 14px; padding: 12px;">
+                    Log In
+                </button>
+            </form>
+            <div class="form-toggle-text" id="auth-toggle-mode">
+                Don't have an account? <a href="#" id="switch-to-register">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div class="modal-overlay" id="create-post-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">Create New Post</h3>
+                <button class="close-modal-btn">&times;</button>
+            </div>
+            <form id="modal-post-form">
+                <div class="form-group">
+                    <label>Post Content</label>
+                    <textarea id="modal-post-text" rows="4" placeholder="What's happening?" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Image URL (Optional)</label>
+                    <input type="url" id="modal-post-img-url" placeholder="https://images.unsplash.com/...">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 12px; margin-top: 12px;">
+                    Publish Post
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal-overlay" id="edit-profile-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Profile</h3>
+                <button class="close-modal-btn">&times;</button>
+            </div>
+            <form id="edit-profile-form">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="edit-name-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Bio</label>
+                    <textarea id="edit-bio-input" rows="3" placeholder="Tell the world about yourself..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Avatar Image URL</label>
+                    <input type="text" id="edit-avatar-input" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Cover Photo URL</label>
+                    <input type="text" id="edit-cover-input" placeholder="https://...">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 12px; margin-top: 12px;">
+                    Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- User List Modal (Followers / Following) -->
+    <div class="modal-overlay" id="user-list-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title" id="user-list-modal-title">Users</h3>
+                <button class="close-modal-btn">&times;</button>
+            </div>
+            <div id="user-list-modal-body" style="max-height: 350px; overflow-y: auto;">
+                <!-- List dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div class="modal-overlay" id="lightbox-modal">
+        <div style="position: relative; max-width: 90vw; max-height: 90vh;">
+            <button class="close-modal-btn" style="position: absolute; top: -36px; right: 0; color: white; font-size: 2rem;">&times;</button>
+            <img id="lightbox-img" src="" style="max-width: 90vw; max-height: 85vh; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); object-fit: contain;">
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Application JavaScript Files -->
+    <script src="/js/api.js"></script>
+    <script src="/js/feed.js"></script>
+    <script src="/js/profile.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
